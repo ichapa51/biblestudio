@@ -263,8 +263,10 @@ public class App implements AppContext, WindowListener, ActionStatusListener {
 	}
 	
 	protected void closeDataClient() {
-		Command<?> cmd = dataClient.createCloseCommand(null);
-		cmd.execute();
+		if (getDataClient() != null) {
+			Command<?> cmd = dataClient.createCloseCommand(null);
+			cmd.execute();
+		}
 	}
 	
 	private static void createAndShowGUI(String[] args) {
