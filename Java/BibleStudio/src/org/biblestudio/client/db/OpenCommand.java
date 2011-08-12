@@ -12,7 +12,7 @@ public class OpenCommand extends DataCommand<ConnectionRequest> {
 	public void execute() {
 		boolean success = false;
 		try {
-			fireMessageSent("Starting " + dbEngine.getName() + " engine...");
+			fireMessageSent("Starting database engine...");
 			dbEngine.start(getInput());
 			if (getInput() == null) {
 				this.setInput(dbEngine.getConnectionConfig());
