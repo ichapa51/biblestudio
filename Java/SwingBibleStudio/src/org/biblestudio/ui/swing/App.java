@@ -5,8 +5,6 @@ import java.awt.event.WindowListener;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.JFrame;
-
 import org.biblestudio.client.ActionStatusListener;
 import org.biblestudio.client.BibleDataClient;
 import org.biblestudio.client.Command;
