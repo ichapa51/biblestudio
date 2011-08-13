@@ -70,8 +70,8 @@ public class BiblePanel extends JPanel implements AppListener, ActionStatusListe
 		searchPanel = new SearchPanel();
 		searchPanel.addPropertyChangeListener(this);
 		tabbedPane = new JTabbedPane();
-		tabbedPane.add("Contents", contentsPanel);
-		tabbedPane.add("Search", searchPanel);
+		tabbedPane.add(App.getContext().getResources().getLabelContents(), contentsPanel);
+		tabbedPane.add(App.getContext().getResources().getLabelSearch(), searchPanel);
 		tabbedPane.setTabPlacement(JTabbedPane.BOTTOM);
 		reader = new HtmlPanel();
 		JPanel mainPanel = new JPanel(new BorderLayout());
@@ -109,15 +109,12 @@ public class BiblePanel extends JPanel implements AppListener, ActionStatusListe
 	
 	protected JToolBar createToolBar() {
 		JToolBar toolBar = new JToolBar();
-		JButton bibleButton = new JButton("Select Bible...");
-		bibleButton.setEnabled(false); // TODO
-		//toolBar.add(bibleButton);
-		//toolBar.addSeparator();
 		titleLabel = new JLabel();
 		toolBar.addSeparator();
 		toolBar.add(titleLabel);
 		toolBar.add(Box.createHorizontalGlue());
 		previousButton = new JButton("<");
+		previousButton.setToolTipText(App.getContext().getResources().getLabelPrevious());
 		previousButton.setEnabled(false);
 		previousButton.addActionListener(new ActionListener() {
 			@Override
@@ -127,6 +124,7 @@ public class BiblePanel extends JPanel implements AppListener, ActionStatusListe
 		});
 		toolBar.add(previousButton);
 		nextButton = new JButton(">");
+		nextButton.setToolTipText(App.getContext().getResources().getLabelNext());
 		nextButton.setEnabled(false);
 		nextButton.addActionListener(new ActionListener() {
 			@Override

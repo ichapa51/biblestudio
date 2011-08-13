@@ -30,12 +30,12 @@ public class BibleMenu extends JMenuBar implements AppListener {
 	protected void createMenu() {
 		AppResources resx = App.getContext().getResources();
 		// File Menu
-		JMenu menu = new JMenu(resx.getMenuFileName());
+		JMenu menu = new JMenu(resx.getMenuFile());
 		//menu.setMnemonic(KeyEvent.VK_F);
 		//menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, ActionEvent.ALT_MASK));
 		//menuItem.setActionCommand("new");
 		this.add(menu);
-		JMenuItem menuItem = new JMenuItem(resx.getMenuFileImportName());
+		JMenuItem menuItem = new JMenuItem(resx.getMenuFileImport());
 		menuItem.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -44,7 +44,7 @@ public class BibleMenu extends JMenuBar implements AppListener {
 		});
 		menu.add(menuItem);
 		menu.addSeparator();
-		menuItem = new JMenuItem(resx.getMenuFileExitName());
+		menuItem = new JMenuItem(resx.getMenuFileExit());
 		menuItem.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -53,13 +53,24 @@ public class BibleMenu extends JMenuBar implements AppListener {
 		});
         menu.add(menuItem);
         // Bible Menu
-        bibleMenu = new JMenu(resx.getMenuBibleName());
+        bibleMenu = new JMenu(resx.getMenuBible());
         this.add(bibleMenu);
         bibleMenu.setEnabled(false);
-        // Window Menu
-        menu = new JMenu(resx.getMenuWindowName());
+        // Tools Menu
+        menu = new JMenu(resx.getMenuTools());
         this.add(menu);
-        menuItem = new JMenuItem(resx.getMenuWindowNewName());
+        menuItem = new JMenuItem(resx.getMenuToolsOptions());
+		menuItem.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				OptionsDialog.showDialog();
+			}
+		});
+		menu.add(menuItem);
+        // Window Menu
+        menu = new JMenu(resx.getMenuWindow());
+        this.add(menu);
+        menuItem = new JMenuItem(resx.getMenuWindowNew());
 		menuItem.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -68,9 +79,9 @@ public class BibleMenu extends JMenuBar implements AppListener {
 		});
         menu.add(menuItem);
         //Help Menu
-        menu = new JMenu(resx.getMenuHelpName());
+        menu = new JMenu(resx.getMenuHelp());
         this.add(menu);
-        menuItem = new JMenuItem(resx.getMenuHelpAboutName());
+        menuItem = new JMenuItem(resx.getMenuHelpAbout());
 		menuItem.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -83,7 +94,7 @@ public class BibleMenu extends JMenuBar implements AppListener {
 	protected void showAbout() {
 		JOptionPane.showMessageDialog(App.getContext().getMainFrame(),
 				App.getContext().getAppTitle() + " 2011",
-				App.getContext().getResources().getMenuHelpAboutName(),
+				App.getContext().getResources().getMenuHelpAbout(),
 				JOptionPane.INFORMATION_MESSAGE);
 	}
 	

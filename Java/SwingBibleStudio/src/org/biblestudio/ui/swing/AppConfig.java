@@ -7,6 +7,10 @@ import java.io.FileOutputStream;
 import java.util.Locale;
 import java.util.Properties;
 
+import javax.swing.JFrame;
+import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
+
 import org.biblestudio.client.ConnectionRequest;
 import org.biblestudio.util.FileUtils;
 /**
@@ -29,9 +33,15 @@ public class AppConfig {
 					new FileInputStream(FILE));
 			settings.load(in);
 			in.close();
+			applyAll();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+	
+	protected void applyAll() {
+		this.setUILocale(this.getUILocale());
+		this.setLookAndFeel(this.getLookAndFeel());
 	}
 	
 	public Locale getUILocale() {
@@ -65,6 +75,30 @@ public class AppConfig {
 		settings.setProperty("DocLocale", locale.toString());
 	}
 	
+	public String getLookAndFeel() {
+		String lookAndFeel = settings.getProperty("LookAndFeel");
+		if (lookAndFeel == null) {
+			lookAndFeel = UIManager.getLookAndFeel().getClass().getName();
+		}
+		return lookAndFeel;
+	}
+	
+	public void setLookAndFeel(String lookAndFeel) {
+		try {
+			UIManager.setLookAndFeel(lookAndFeel);
+			JFrame mainFrame = App.getContext().getMainFrame();
+			if (mainFrame != null) {
+				SwingUtilities.updateComponentTreeUI(mainFrame);
+			}
+			if (UIManager.getCrossPlatformLookAndFeelClassName().equals(lookAndFeel)) {
+				//JFrame.setDefaultLookAndFeelDecorated(true);
+			}
+			settings.setProperty("LookAndFeel", lookAndFeel);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
 	public String getDataClientImpl() {
 		return "org.biblestudio.db.hsql.HsqlDataClient";
 	}
@@ -75,11 +109,12 @@ public class AppConfig {
 	
 	public void save() {
 		try {
+			settings.setProperty("LookAndFeel", getLookAndFeel());
 			settings.setProperty("UILocale", getUILocale().toString());
 			settings.setProperty("DocLocale", getDocLocale().toString());
 			BufferedOutputStream out = new BufferedOutputStream(
 					new FileOutputStream(FILE));
-			settings.store(out, "eBible User Settings");
+			settings.store(out, "BibleStudio User Settings");
 			out.flush();
 			out.close();
 		} catch (Exception e) {
