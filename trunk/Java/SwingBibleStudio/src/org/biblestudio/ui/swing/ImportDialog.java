@@ -53,6 +53,7 @@ public class ImportDialog extends JPanel implements ActionStatusListener {
 		panel.add(fileTextField, BorderLayout.CENTER);
 		JPanel p = new JPanel(new BorderLayout());
 		selectFileButton = new JButton("...");
+		selectFileButton.setToolTipText(App.getContext().getResources().getLabelSelectFile());
 		selectFileButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -60,7 +61,7 @@ public class ImportDialog extends JPanel implements ActionStatusListener {
 			}
 		});
 		p.add(selectFileButton, BorderLayout.WEST);
-		importButton = new JButton(App.getContext().getResources().getMenuFileImportName());
+		importButton = new JButton(App.getContext().getResources().getLabelImport());
 		importButton.setEnabled(false);
 		importButton.addActionListener(new ActionListener() {
 			@Override
@@ -148,7 +149,9 @@ public class ImportDialog extends JPanel implements ActionStatusListener {
 	}
 	
 	public static void showDialog() {
-		JDialog dialog = new JDialog(App.getContext().getMainFrame(), "Import Bible", Dialog.ModalityType.APPLICATION_MODAL);
+		JDialog dialog = new JDialog(App.getContext().getMainFrame(),
+				App.getContext().getResources().getDialogImport(),
+				Dialog.ModalityType.APPLICATION_MODAL);
 		ImportDialog panel = new ImportDialog();
 		panel.setModalParent(dialog);
 		dialog.setContentPane(panel);

@@ -37,10 +37,6 @@ public class App implements AppContext, WindowListener, ActionStatusListener {
 	private BibleStudio mainFrame;
 	private List<Bible> bibles;
 	
-	static {
-		JFrame.setDefaultLookAndFeelDecorated(true);
-	}
-	
 	protected App() {
 		
 	}
