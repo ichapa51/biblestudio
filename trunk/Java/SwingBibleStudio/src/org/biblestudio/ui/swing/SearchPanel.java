@@ -13,13 +13,10 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import org.biblestudio.client.ActionStatusListener;
-import org.biblestudio.client.Command;
+import org.biblestudio.client.ActionStatusAdapter;
 import org.biblestudio.client.SearchQuery;
 import org.biblestudio.client.event.CompleteStatusEvent;
 import org.biblestudio.client.event.ErrorStatusEvent;
-import org.biblestudio.client.event.MessageStatusEvent;
-import org.biblestudio.client.event.PercentStatusEvent;
 import org.biblestudio.model.Bible;
 import org.biblestudio.model.Paragraph;
 /**
@@ -28,7 +25,7 @@ import org.biblestudio.model.Paragraph;
  * Creation Date: 09/08/2011
  */
 @SuppressWarnings("serial")
-public class SearchPanel extends JPanel implements ActionStatusListener, PropertyChangeListener {
+public class SearchPanel extends JPanel {
 
 	private JTextField searchField;
 	private JLabel resultsLabel;
@@ -53,7 +50,14 @@ public class SearchPanel extends JPanel implements ActionStatusListener, Propert
 		northPanel.add(resultsLabel, BorderLayout.SOUTH);
 		add(northPanel, BorderLayout.NORTH);
 		resultsPanel = new ResultsPanel();
-		resultsPanel.addPropertyChangeListener(this);
+		resultsPanel.addPropertyChangeListener(new PropertyChangeListener() {
+			@Override
+			public void propertyChange(PropertyChangeEvent evt) {
+				if ("LastDoubleClickedParagraph".equals(evt.getPropertyName())) {
+					firePropertyChange("LastDoubleClickedParagraph", evt.getOldValue(), evt.getNewValue());
+				}
+			}
+		});
 		add(resultsPanel, BorderLayout.CENTER);
 	}
 
@@ -86,48 +90,28 @@ public class SearchPanel extends JPanel implements ActionStatusListener, Propert
 		SearchQuery query = new SearchQuery();
 		query.setBibleKey(getBible().getName());
 		query.setText(searchField.getText());
-		Command<SearchQuery> cmd = App.getContext().getDataClient().createSearchQueryCommand(query);
-		cmd.addActionStatusListener(this);
-		cmd.executeAsync();
+		App.getContext().getDataClient().createSearchQueryCommand(query).
+			setActionStatus(new ActionStatusAdapter() {
+				@Override
+				public void actionCompleted(CompleteStatusEvent e) {
+					searchCompleted(e);
+				}
+				@Override
+				public void errorFound(ErrorStatusEvent e) {
+					e.getError().printStackTrace();
+				}
+		}).executeAsync();
 	}
 
-	/* (non-Javadoc)
-	 * @see org.ebible.client.ActionStatusListener#actionCompleted(org.ebible.client.event.CompleteStatusEvent)
-	 */
-	@Override
-	public void actionCompleted(CompleteStatusEvent evt) {
-		if (evt.isSuccess()) {
-			SearchQuery query = (SearchQuery)evt.getTagObject();
+	protected void searchCompleted(CompleteStatusEvent e) {
+		if (e.isSuccess()) {
+			SearchQuery query = (SearchQuery)e.getTagObject();
 			if (query.getResult() != null) {
-				String result = query.getResult().getList().size() + " Ocurrencias";
+				String result = query.getResult().getList().size() + " " + 
+					App.getContext().getResources().getLabelSearchResults();
 				resultsLabel.setText(result);
 				resultsPanel.setResults(query.getResult().getList());
 			}
-		}
-	}
-
-	@Override
-	public void messageSent(MessageStatusEvent event) {
-
-	}
-
-	@Override
-	public void percentDone(PercentStatusEvent event) {
-
-	}
-
-	@Override
-	public void errorFound(ErrorStatusEvent event) {
-
-	}
-
-	/* (non-Javadoc)
-	 * @see java.beans.PropertyChangeListener#propertyChange(java.beans.PropertyChangeEvent)
-	 */
-	@Override
-	public void propertyChange(PropertyChangeEvent evt) {
-		if ("LastDoubleClickedParagraph".equals(evt.getPropertyName())) {
-			this.firePropertyChange("LastDoubleClickedParagraph", evt.getOldValue(), evt.getNewValue());
 		}
 	}
 }

@@ -16,7 +16,6 @@ import javax.swing.JTabbedPane;
 import javax.swing.JToolBar;
 
 import org.biblestudio.client.ActionStatusListener;
-import org.biblestudio.client.Command;
 import org.biblestudio.client.CommonQueries;
 import org.biblestudio.client.IdQuery;
 import org.biblestudio.client.IndexQuery;
@@ -159,16 +158,14 @@ public class BiblePanel extends JPanel implements AppListener, ActionStatusListe
 		query.setIncludingHeaders(true);
 		query.setBibleKey(bible.getName());
 		query.setText(bookName + " " + chapter);
-		Command<?> cmd = App.getContext().getDataClient().createSearchQueryCommand(query);
-		cmd.addActionStatusListener(this);
-		cmd.executeAsync();
+		App.getContext().getDataClient().createSearchQueryCommand(query).
+			setActionStatus(this).executeAsync();
 	}
 	
 	protected void showIndex(int pId) {
 		IndexQuery query = new IndexQuery("ShowIndex", getBible().getName(), getIndexType(), pId);
-		Command<?> cmd = App.getContext().getDataClient().createIndexQueryCommand(query);
-		cmd.addActionStatusListener(this);
-		cmd.executeAsync();
+		App.getContext().getDataClient().createIndexQueryCommand(query).
+			setActionStatus(this).executeAsync();
 	}
 	
 	protected void showContent(List<Paragraph> content) {
@@ -177,8 +174,7 @@ public class BiblePanel extends JPanel implements AppListener, ActionStatusListe
 			IdQuery q = CommonQueries.getBookById(p.getIdBook(), null);
 			Book book = App.getContext().getModelCache().get(q);
 			if (book == null) {
-				Command<?> cmd = App.getContext().getDataClient().createGetEntityCommand(q);
-				cmd.execute();
+				App.getContext().getDataClient().createGetEntityCommand(q).execute();
 				book = (Book) q.getResult();
 			}
 			titleLabel.setText(book.getTitle() + " " + p.getDivKey());
@@ -219,9 +215,8 @@ public class BiblePanel extends JPanel implements AppListener, ActionStatusListe
 				showContent(q.getResult().getList());
 				if (q.getResult().getList().size() > 0) {
 					indexQuery = new IndexQuery("UpdateIndex", getBible().getName(), getIndexType(), q.getResult().getList().get(0).getId());
-					Command<?> cmd = App.getContext().getDataClient().createIndexQueryCommand(indexQuery);
-					cmd.addActionStatusListener(this);
-					cmd.executeAsync();
+					App.getContext().getDataClient().createIndexQueryCommand(indexQuery).
+						setActionStatus(this).executeAsync();
 				}
 			} else if ("ShowIndex".equals(e.getTag())) {
 				IndexQuery q = (IndexQuery) e.getTagObject();

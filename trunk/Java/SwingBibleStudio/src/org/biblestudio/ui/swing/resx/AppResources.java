@@ -106,6 +106,10 @@ public class AppResources {
 		return getResources().getString("Label.LookAndFeel");
 	}
 	
+	public String getLabelSearchResults() {
+		return getResources().getString("Label.SearchResults");
+	}
+	
 	public String getButtonAccept() {
 		return getResources().getString("Button.Accept");
 	}

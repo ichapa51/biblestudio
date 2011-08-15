@@ -20,7 +20,6 @@ import javax.swing.JTextField;
 import org.biblestudio.client.ActionStatusListener;
 import org.biblestudio.client.BibleReader;
 import org.biblestudio.client.BibleSource;
-import org.biblestudio.client.Command;
 import org.biblestudio.client.ImportMode;
 import org.biblestudio.client.event.CompleteStatusEvent;
 import org.biblestudio.client.event.ErrorStatusEvent;
@@ -33,7 +32,7 @@ import org.biblestudio.client.event.PercentStatusEvent;
  * Creation Date: 11/08/2011
  */
 @SuppressWarnings("serial")
-public class ImportDialog extends JPanel implements ActionStatusListener {
+public class ImportDialog extends JPanel {
 
 	private Component modalParent;
 	JTextField fileTextField;
@@ -110,13 +109,28 @@ public class ImportDialog extends JPanel implements ActionStatusListener {
 		BibleReader reader = org.biblestudio.client.BibleFactory.
 								getFactory().createBibleSourceFromFile(file);
 		BibleSource source = new BibleSource(reader, ImportMode.REPLACE);
-		Command<?> cmd = App.getContext().getDataClient().createImportCommand(source);
-		cmd.addActionStatusListener(this);
-		cmd.executeAsync();
+		App.getContext().getDataClient().createImportCommand(source).
+			setActionStatus(new ActionStatusListener() {
+				@Override
+				public void actionCompleted(CompleteStatusEvent e) {
+					importActionCompleted(e);
+				}
+				@Override
+				public void messageSent(MessageStatusEvent e) {
+					importMessageSent(e);
+				}
+				@Override
+				public void percentDone(PercentStatusEvent e) {
+					importPercentDone(e);
+				}
+				@Override
+				public void errorFound(ErrorStatusEvent e) {
+					importErrorFound(e);
+				}
+		}).executeAsync();
 	}
 	
-	@Override
-	public void actionCompleted(CompleteStatusEvent e) {
+	protected void importActionCompleted(CompleteStatusEvent e) {
 		progressBar.setIndeterminate(false);
 		if (e.isSuccess()) {
 			App.getContext().getDesktop().closeAll();
@@ -127,13 +141,11 @@ public class ImportDialog extends JPanel implements ActionStatusListener {
 		importButton.setEnabled(true);
 	}
 
-	@Override
-	public void messageSent(MessageStatusEvent e) {
+	protected void importMessageSent(MessageStatusEvent e) {
 		statusLabel.setText(e.getMessage());
 	}
 
-	@Override
-	public void percentDone(PercentStatusEvent e) {
+	protected void importPercentDone(PercentStatusEvent e) {
 		if (e.getPercent() == null) {
 			progressBar.setIndeterminate(true);
 		} else {
@@ -142,8 +154,7 @@ public class ImportDialog extends JPanel implements ActionStatusListener {
 		}
 	}
 
-	@Override
-	public void errorFound(ErrorStatusEvent e) {
+	protected void importErrorFound(ErrorStatusEvent e) {
 		e.getError().printStackTrace();
 		statusLabel.setText(e.getError().getMessage());
 	}

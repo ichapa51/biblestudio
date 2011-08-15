@@ -7,9 +7,9 @@ import org.biblestudio.client.event.PercentStatusEvent;
 /**
  * 
  * @author Israel Chapa
- * Creation Date: 28/07/2011
+ * Creation Date: 15/08/2011
  */
-public class StatusListenerAdapter implements ActionStatusListener {
+public class ActionStatusAdapter implements ActionStatusListener {
 
 	/* (non-Javadoc)
 	 * @see org.ebible.client.ActionStatusListener#actionCompleted(org.ebible.client.event.CompleteStatusEvent)
