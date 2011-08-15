@@ -22,6 +22,19 @@ public abstract class AbstractCommand<E extends Tag> extends StatusDispatcher im
 	}
 	
 	@Override
+	public Command<E> setActionStatus(ActionStatusListener listener) {
+		if (listener == null) {
+			if (listeners.size() > 0) {
+				listeners.remove(listeners.size() - 1);
+			}
+			return null;
+		} else {
+			super.addActionStatusListener(listener);
+			return this;
+		}
+	}
+	
+	@Override
 	public void setAsyncPriority(int priority) {
 		this.priority = priority;
 	}

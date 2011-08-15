@@ -258,8 +258,7 @@ public class App implements AppContext, WindowListener, ActionStatusListener {
 	
 	protected void closeDataClient() {
 		if (getDataClient() != null) {
-			Command<?> cmd = dataClient.createCloseCommand(null);
-			cmd.execute();
+			dataClient.createCloseCommand(null).execute();
 		}
 	}
 	

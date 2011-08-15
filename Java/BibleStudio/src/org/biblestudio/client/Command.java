@@ -8,6 +8,8 @@ public interface Command<E extends Tag> {
 	
 	void removeActionStatusListener(ActionStatusListener listener);
 	
+	Command<E> setActionStatus(ActionStatusListener listener);
+	
 	E getInput();
 	
 	void setInput(E input);

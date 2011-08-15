@@ -183,4 +183,12 @@ public class ProxyCommand<E extends Tag> extends StatusDispatcher implements Com
 	public int getAsyncPriority() {
 		return cmd.getAsyncPriority();
 	}
+
+	/* (non-Javadoc)
+	 * @see org.biblestudio.client.Command#setActionStatus(org.biblestudio.client.ActionStatusListener)
+	 */
+	@Override
+	public Command<E> setActionStatus(ActionStatusListener listener) {
+		return cmd.setActionStatus(listener);
+	}
 }
