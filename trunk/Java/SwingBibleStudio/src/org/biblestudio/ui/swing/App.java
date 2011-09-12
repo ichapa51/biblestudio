@@ -22,7 +22,7 @@ import org.biblestudio.ui.swing.resx.AppResources;
 /**
  * 
  * @author Israel Chapa
- * Creation Date: 29/07/2011
+ * @since 29/07/2011
  */
 public class App implements AppContext, WindowListener, ActionStatusListener {
 
