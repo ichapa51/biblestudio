@@ -725,7 +725,7 @@ public class HsqlDbEngine extends SqlDbEngine {
 		if (conn == null) {
 			conn = this.getSharedConnection();
 		}
-		String sql = "SELECT Id FROM " + table + " WHERE Name = '" + alias + "'";
+		String sql = "SELECT Id FROM " + table + " WHERE LCASE(Name) = '" + alias.toLowerCase() + "'";
 		Statement stmt = conn.createStatement();
 		ResultSet rs = stmt.executeQuery(sql);
 		Integer result = null;
