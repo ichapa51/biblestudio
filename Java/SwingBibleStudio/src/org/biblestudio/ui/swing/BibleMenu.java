@@ -4,6 +4,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
 
+import javax.swing.JCheckBoxMenuItem;
+import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
@@ -70,6 +72,17 @@ public class BibleMenu extends JMenuBar implements AppListener {
         // Window Menu
         menu = new JMenu(resx.getMenuWindow());
         this.add(menu);
+        if (new JFrame().isAlwaysOnTopSupported()) {
+        	 menuItem = new JCheckBoxMenuItem("Always On Top"); //TODO
+     		menuItem.addActionListener(new ActionListener() {
+     			@Override
+     			public void actionPerformed(ActionEvent e) {
+     				boolean aot = App.getContext().getMainFrame().isAlwaysOnTop();
+     				App.getContext().getMainFrame().setAlwaysOnTop(!aot);
+     			}
+     		});
+     		menu.add(menuItem);
+        }
         menuItem = new JMenuItem(resx.getMenuWindowNew());
 		menuItem.addActionListener(new ActionListener() {
 			@Override

@@ -107,7 +107,7 @@ public class ImportDialog extends JPanel {
 		progressBar.setIndeterminate(true);
 		java.io.File file = new java.io.File(fileTextField.getText());
 		BibleReader reader = org.biblestudio.client.BibleFactory.
-								getFactory().createBibleSourceFromFile(file);
+								getFactory().createBibleReaderFromFile(file);
 		BibleSource source = new BibleSource(reader, ImportMode.REPLACE);
 		App.getContext().getDataClient().createImportCommand(source).
 			setActionStatus(new ActionStatusListener() {

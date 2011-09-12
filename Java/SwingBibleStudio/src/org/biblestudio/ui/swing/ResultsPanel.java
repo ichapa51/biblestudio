@@ -4,6 +4,10 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.StringSelection;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -11,7 +15,9 @@ import java.util.List;
 
 import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.ListCellRenderer;
@@ -34,6 +40,9 @@ public class ResultsPanel extends JPanel {
 	private JList list;
 	protected ParagraphListModel listModel;
 	protected Paragraph lastDoubleClickedParagraph;
+	protected Paragraph lastPopupClickedParagraph;
+	private JPopupMenu popupMenu;
+	private Clipboard clipboard;
 	
 	public ResultsPanel() {
 		super(new BorderLayout());
@@ -49,17 +58,54 @@ public class ResultsPanel extends JPanel {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				if (e.getClickCount() == 2) {
-					int index = list.locationToIndex(e.getPoint());
-					if (index >= 0) {
-						Paragraph p = (Paragraph) listModel.getElementAt(index);
-						if (p != null) {
-							setLastDoubleClickedParagraph(p);
-						}
+					Paragraph p = this.getSelectedParagraph(e);
+					if (p != null) {
+						setLastDoubleClickedParagraph(p);
+					}
+				}
+			}
+			@Override
+			public void mousePressed(MouseEvent e) {
+				showPopMenu(e);
+			}
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				showPopMenu(e);
+			}
+			public Paragraph getSelectedParagraph(MouseEvent e) {
+				int index = list.locationToIndex(e.getPoint());
+				if (index >= 0) {
+					return (Paragraph) listModel.getElementAt(index);
+				}
+				return null;
+			}
+			public void showPopMenu(MouseEvent e) {
+				if (e.isPopupTrigger()) {
+					Paragraph p = this.getSelectedParagraph(e);
+					if (p != null) {
+						setLastPopupClickedParagraph(p);
+						popupMenu.show(e.getComponent(), e.getX(), e.getY());
 					}
 				}
 			}
 		};
 		list.addMouseListener(mouseListener);
+		popupMenu = new JPopupMenu();
+		JMenuItem popCopy = new JMenuItem("Copy");
+		popCopy.setMnemonic('C');
+		popupMenu.add(popCopy);
+		popCopy.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) { 
+				Paragraph p = getLastPopupClickedParagraph();
+				if (p != null) {
+					if (clipboard == null) {
+						clipboard = App.getContext().getMainFrame().getToolkit().getSystemClipboard();
+					}
+					StringSelection data = new StringSelection(p.getPlainText());
+					clipboard.setContents(data, data);
+				}
+			}
+		});
 	}
 
 	public void setResults(List<Paragraph> results) {
@@ -78,6 +124,16 @@ public class ResultsPanel extends JPanel {
 
 	public Paragraph getLastDoubleClickedParagraph() {
 		return lastDoubleClickedParagraph;
+	}
+	
+	public void setLastPopupClickedParagraph(Paragraph p) {
+		//Paragraph old = this.lastPopupClickedParagraph;
+		this.lastPopupClickedParagraph = p;
+		//this.firePropertyChange("LastPopupClickedParagraph", old, p);
+	}
+	
+	public Paragraph getLastPopupClickedParagraph() {
+		return lastPopupClickedParagraph;
 	}
 
 	private class ParagraphListModel extends AbstractListModel {
