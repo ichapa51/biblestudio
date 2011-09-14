@@ -91,6 +91,14 @@ public class BibleMenu extends JMenuBar implements AppListener {
 			}
 		});
         menu.add(menuItem);
+        menuItem = new JMenuItem(resx.getMenuWindowPopup());
+		menuItem.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				App.getContext().getMainFrame().getDesktop().popupSelectedFrame();
+			}
+		});
+        menu.add(menuItem);
         //Help Menu
         menu = new JMenu(resx.getMenuHelp());
         this.add(menu);

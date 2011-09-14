@@ -62,6 +62,10 @@ public class AppResources {
 		return getResources().getString("Menu.Window.New");
 	}
 	
+	public String getMenuWindowPopup() {
+		return getResources().getString("Menu.Window.Popup");
+	}
+	
 	public String getMenuHelp() {
 		return getResources().getString("Menu.Help");
 	}

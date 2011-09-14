@@ -103,6 +103,11 @@ public class AppConfig {
 		return "org.biblestudio.db.hsql.HsqlDataClient";
 	}
 	
+	public boolean isCrossPlatformLookAndFeel() {
+		return UIManager.getCrossPlatformLookAndFeelClassName().equals(
+				getLookAndFeel());
+	}
+	
 	public ConnectionRequest getConnectionConfig() {
 		return null; // TODO
 	}
