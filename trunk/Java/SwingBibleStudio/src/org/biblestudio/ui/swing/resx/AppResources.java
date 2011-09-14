@@ -54,6 +54,10 @@ public class AppResources {
 		return getResources().getString("Menu.Window");
 	}
 	
+	public String getMenuWindowAlwaysOnTop() {
+		return getResources().getString("Menu.Window.AlwaysOnTop");
+	}
+	
 	public String getMenuWindowNew() {
 		return getResources().getString("Menu.Window.New");
 	}
@@ -110,11 +114,19 @@ public class AppResources {
 		return getResources().getString("Label.SearchResults");
 	}
 	
+	public String getLabelLoading() {
+		return getResources().getString("Label.Loading");
+	}
+	
 	public String getButtonAccept() {
 		return getResources().getString("Button.Accept");
 	}
 	
 	public String getButtonCancel() {
 		return getResources().getString("Button.Cancel");
+	}
+	
+	public String getButtonCopy() {
+		return getResources().getString("Button.Copy");
 	}
 }

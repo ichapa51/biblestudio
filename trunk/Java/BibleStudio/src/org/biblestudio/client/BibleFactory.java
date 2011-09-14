@@ -13,7 +13,7 @@ public class BibleFactory {
 		
 	}
 	
-	public BibleReader createBibleSourceFromFile(File file) {
+	public BibleReader createBibleReaderFromFile(File file) {
 		return FileBibleReader.createBibleSourceFromFile(file);
 	}
 	

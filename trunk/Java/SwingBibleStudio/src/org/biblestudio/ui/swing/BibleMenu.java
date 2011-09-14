@@ -73,7 +73,7 @@ public class BibleMenu extends JMenuBar implements AppListener {
         menu = new JMenu(resx.getMenuWindow());
         this.add(menu);
         if (new JFrame().isAlwaysOnTopSupported()) {
-        	 menuItem = new JCheckBoxMenuItem("Always On Top"); //TODO
+        	menuItem = new JCheckBoxMenuItem(resx.getMenuWindowAlwaysOnTop());
      		menuItem.addActionListener(new ActionListener() {
      			@Override
      			public void actionPerformed(ActionEvent e) {

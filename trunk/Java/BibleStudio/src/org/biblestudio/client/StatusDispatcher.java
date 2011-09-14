@@ -10,7 +10,7 @@ import org.biblestudio.client.event.PercentStatusEvent;
 /**
  * 
  * @author Israel Chapa
- * Creation Date: 04/08/2011
+ * @since 04/08/2011
  */
 public abstract class StatusDispatcher {
 
@@ -18,7 +18,11 @@ public abstract class StatusDispatcher {
 	protected Exception lastError;
 	
 	public StatusDispatcher() {
-		listeners = new ArrayList<ActionStatusListener>();
+		listeners = new ArrayList<ActionStatusListener>(getInitialCapacity());
+	}
+	
+	protected int getInitialCapacity() {
+		return 1;
 	}
 	
 	public void addActionStatusListener(ActionStatusListener listener) {

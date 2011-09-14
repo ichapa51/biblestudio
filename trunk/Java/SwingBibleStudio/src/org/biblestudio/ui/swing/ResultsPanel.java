@@ -42,6 +42,7 @@ public class ResultsPanel extends JPanel {
 	protected Paragraph lastDoubleClickedParagraph;
 	protected Paragraph lastPopupClickedParagraph;
 	private JPopupMenu popupMenu;
+	private JMenuItem popCopy;
 	private Clipboard clipboard;
 	
 	public ResultsPanel() {
@@ -84,6 +85,7 @@ public class ResultsPanel extends JPanel {
 					Paragraph p = this.getSelectedParagraph(e);
 					if (p != null) {
 						setLastPopupClickedParagraph(p);
+						popCopy.setText(App.getContext().getResources().getButtonCopy());
 						popupMenu.show(e.getComponent(), e.getX(), e.getY());
 					}
 				}
@@ -91,7 +93,7 @@ public class ResultsPanel extends JPanel {
 		};
 		list.addMouseListener(mouseListener);
 		popupMenu = new JPopupMenu();
-		JMenuItem popCopy = new JMenuItem("Copy");
+		popCopy = new JMenuItem("Copy");
 		popCopy.setMnemonic('C');
 		popupMenu.add(popCopy);
 		popCopy.addActionListener(new ActionListener() {
@@ -218,6 +220,14 @@ public class ResultsPanel extends JPanel {
 				textArea.setBackground(initialColor);
 			}
 			return this;
+		}
+	}
+	
+	@Override
+	public void updateUI() {
+		super.updateUI();
+		if (popupMenu != null) {
+			popupMenu.updateUI();
 		}
 	}
 }

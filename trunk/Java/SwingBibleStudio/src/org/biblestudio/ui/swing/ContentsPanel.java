@@ -4,15 +4,15 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTree;
+import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
 
 import org.biblestudio.model.ModelEntity;
-import org.biblestudio.ui.swing.model.EntityTreeModel;
+import org.biblestudio.ui.swing.model.EntityTreeNode;
 /**
  * 
  * @author Israel Chapa
@@ -24,19 +24,21 @@ public class ContentsPanel extends JPanel {
 	private ModelEntity lastSingleClickedEntity;
 	private ModelEntity lastDoubleClickedEntity;
 	JScrollPane scroll;
-	EntityTreeModel model;
+	EntityTreeNode modelRoot;
 	JTree tree;
 	
 	public ContentsPanel() {
 		super(new BorderLayout());
-		model = new EntityTreeModel();
-		tree = new JTree(model);
-		MouseListener ml = new MouseAdapter() {
+		//model = new EntityTreeModel();
+		modelRoot = new EntityTreeNode();
+		tree = new JTree();
+		tree.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
 				TreePath path = tree.getPathForLocation(e.getX(), e.getY());
 				if (path != null && path.getLastPathComponent() != null) {
-					ModelEntity entity = model.getModelEntity(path.getLastPathComponent());
+					EntityTreeNode node = (EntityTreeNode)path.getLastPathComponent();
+					ModelEntity entity = node.getModelEntity();
 					if (entity != null) {
 						if (e.getClickCount() == 1) {
 							setLastSingleClickedEntity(entity);
@@ -46,8 +48,8 @@ public class ContentsPanel extends JPanel {
 					}
 				}
 			}
-		};
-		tree.addMouseListener(ml);
+		});
+		tree.setEditable(false);
 		tree.setShowsRootHandles(true);
 		tree.setRootVisible(false);
 		tree.setExpandsSelectedPaths(true);
@@ -59,14 +61,12 @@ public class ContentsPanel extends JPanel {
 	}
 	
 	public void setModelRoot(ModelEntity root) {
-		model.setRootEntity(root);
-		if (root != null) {
-			tree.expandPath(new TreePath(model.getRoot()));
-		}
+		this.modelRoot = new EntityTreeNode(root);
+		this.tree.setModel(new DefaultTreeModel(modelRoot));
 	}
 	
 	public ModelEntity getModelRoot() {
-		return model.getRootEntity();
+		return this.modelRoot.getModelEntity();
 	}
 
 	protected void setLastSingleClickedEntity(ModelEntity e) {
