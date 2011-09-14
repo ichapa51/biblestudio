@@ -1,8 +1,8 @@
 package org.biblestudio.db.hsql;
 
+import org.biblestudio.client.ActionStatusListener;
 import org.biblestudio.client.BibleReader;
 import org.biblestudio.client.BibleSource;
-import org.biblestudio.client.Command;
 import org.biblestudio.client.CommonQueries;
 import org.biblestudio.client.DefaultStatusListener;
 import org.biblestudio.client.ImportMode;
@@ -17,6 +17,8 @@ import org.biblestudio.util.ReflectionUtils;
 
 public class HsqlDataClient extends AbstractDataClient {
 
+	protected static ActionStatusListener printStatus = new DefaultStatusListener();
+	
 	@Override
 	public BibleDbEngine createDbEngine() {
 		return new HsqlDbEngine();
@@ -27,18 +29,12 @@ public class HsqlDataClient extends AbstractDataClient {
 		String path = "C:\\Books\\Christian\\Bible\\HTML\\ES\\RV1960\\RV1960.zip";
 		java.io.File file = new java.io.File(path);
 		BibleReader reader = org.biblestudio.client.BibleFactory.
-								getFactory().createBibleSourceFromFile(file);
+								getFactory().createBibleReaderFromFile(file);
 		BibleSource source = new BibleSource(reader, ImportMode.REPLACE);
 		HsqlDataClient client = new HsqlDataClient();
-		Command<?> command = client.createOpenCommand(null);
-		command.addActionStatusListener(new DefaultStatusListener());
-		command.execute();
-		command = client.createImportCommand(source);
-		command.addActionStatusListener(new DefaultStatusListener());
-		command.execute();
-		command = client.createCloseCommand(null);
-		command.addActionStatusListener(new DefaultStatusListener());
-		command.execute();
+		client.createOpenCommand(null).setActionStatus(printStatus).execute();
+		client.createImportCommand(source).setActionStatus(printStatus).execute();
+		client.createCloseCommand(null).setActionStatus(printStatus).execute();
 	}
 	
 	private static SearchQuery searchTest(SearchType type, String query, boolean includeHeaders) throws Exception {
@@ -46,15 +42,9 @@ public class HsqlDataClient extends AbstractDataClient {
 		input.setIncludingHeaders(includeHeaders);
 		input.setIgnoringAccents(true);
 		HsqlDataClient client = new HsqlDataClient();
-		Command<?> command = client.createOpenCommand(null);
-		command.addActionStatusListener(new DefaultStatusListener());
-		command.execute();
-		command = client.createSearchQueryCommand(input);
-		command.addActionStatusListener(new DefaultStatusListener());
-		command.execute();
-		command = client.createCloseCommand(null);
-		command.addActionStatusListener(new DefaultStatusListener());
-		command.execute();
+		client.createOpenCommand(null).setActionStatus(printStatus).execute();
+		client.createSearchQueryCommand(input).setActionStatus(printStatus).execute();
+		client.createCloseCommand(null).setActionStatus(printStatus).execute();
 		return input;
 	}
 	
@@ -72,15 +62,9 @@ public class HsqlDataClient extends AbstractDataClient {
 	private static void modelTest() throws Exception {
 		ModelQuery query = CommonQueries.getBooksByBibleId(2, null);
 		HsqlDataClient client = new HsqlDataClient();
-		Command<?> command = client.createOpenCommand(null);
-		command.addActionStatusListener(new DefaultStatusListener());
-		command.execute();
-		command = client.createModelQueryCommand(query);
-		command.addActionStatusListener(new DefaultStatusListener());
-		command.execute();
-		command = client.createCloseCommand(null);
-		command.addActionStatusListener(new DefaultStatusListener());
-		command.execute();
+		client.createOpenCommand(null).setActionStatus(printStatus).execute();
+		client.createModelQueryCommand(query).setActionStatus(printStatus).execute();
+		client.createCloseCommand(null).setActionStatus(printStatus).execute();
 		if (query.getResult() != null) {
 			for (ModelEntity e : query.getResult()) {
 				System.out.println(ReflectionUtils.toPseudoJsonString(e));

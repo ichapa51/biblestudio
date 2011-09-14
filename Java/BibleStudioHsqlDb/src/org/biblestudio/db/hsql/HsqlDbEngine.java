@@ -698,7 +698,7 @@ public class HsqlDbEngine extends SqlDbEngine {
 			if (input == null) {
 				throw new Exception("SQL Script not found");
 			}
-			java.io.BufferedReader reader = new java.io.BufferedReader(new java.io.InputStreamReader(input));
+			java.io.BufferedReader reader = new java.io.BufferedReader(new java.io.InputStreamReader(input, "utf-8"));
 			String line = null;
 			SqlTransaction trans = new SqlTransaction(this);
 			trans.begin();

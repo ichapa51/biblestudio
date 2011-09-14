@@ -52,7 +52,7 @@ public class BibleStudio extends BetterJFrame {
 		statusLabel.setText(status);
 	}
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
        App.main(args);
     }
 }

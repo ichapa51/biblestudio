@@ -19,6 +19,7 @@ import org.biblestudio.model.Bible;
 import org.biblestudio.ui.swing.event.AppEvent;
 import org.biblestudio.ui.swing.event.AppEventType;
 import org.biblestudio.ui.swing.resx.AppResources;
+import org.biblestudio.util.Utils;
 /**
  * 
  * @author Israel Chapa
@@ -45,7 +46,7 @@ public class App implements AppContext, WindowListener, ActionStatusListener {
 	
 	@Override
 	public String getAppTitle() {
-		return "Bible Studio 0.9 Beta";
+		return "Bible Studio 0.91 Beta";
 	}
 	
 	@Override
@@ -267,11 +268,27 @@ public class App implements AppContext, WindowListener, ActionStatusListener {
 		context.start();
 	}
 	
-	public static void main(final String[] args) {
-        javax.swing.SwingUtilities.invokeLater(new Runnable() {
+	public static void runApp(final String[] args) {
+		javax.swing.SwingUtilities.invokeLater(new Runnable() {
             public void run() {
                 createAndShowGUI(args);
             }
         });
+	}
+	
+	public static void main(final String[] args) throws Exception {
+		if (!Utils.isMacOs() || args.length > 0) {
+			runApp(args);
+		} else {
+			//String loaderClass = "org.eclipse.jdt.internal.jarinjarloader.JarRsrcLoader";
+			//Class<?> loader = Class.forName(loaderClass);
+			//String pathToJar = loader.getProtectionDomain().getCodeSource().getLocation().toURI().getPath();
+			//ProcessBuilder pb = new ProcessBuilder("java", "-Xmx1024m", "-classpath", pathToJar, loaderClass, "RUN");
+			//String pathToJar = App.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath();
+			//System.out.println(pathToJar);
+			//java.io.File jarFile = new java.io.File(pathToJar);
+			ProcessBuilder pb = new ProcessBuilder("java", "-Xmx1024m", "-jar", "BibleStudio0.91.jar", "RUN");
+			pb.start();
+		}
     }
 }

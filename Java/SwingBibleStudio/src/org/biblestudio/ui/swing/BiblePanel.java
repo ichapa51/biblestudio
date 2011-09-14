@@ -32,7 +32,7 @@ import org.biblestudio.model.Paragraph;
 import org.biblestudio.ui.swing.event.AppEvent;
 import org.biblestudio.ui.swing.event.AppEventType;
 import org.biblestudio.ui.swing.html.HtmlPanel;
-import org.biblestudio.ui.swing.model.EntityTreeModel;
+import org.biblestudio.ui.swing.model.ChapterNode;
 /**
  * 
  * @author Israel Chapa
@@ -261,8 +261,8 @@ public class BiblePanel extends JPanel implements AppListener, ActionStatusListe
 		if (evt.getPropertyName().equals("LastDoubleClickedEntity")) {
 			ModelEntity e = contentsPanel.getLastDoubleClickedEntity();
 			if (e != null && bible != null && App.getContext().getDataClient() != null) {
-				if (e instanceof EntityTreeModel.ChapterNode) {
-					EntityTreeModel.ChapterNode chapter = (EntityTreeModel.ChapterNode)e;
+				if (e instanceof ChapterNode) {
+					ChapterNode chapter = (ChapterNode)e;
 					showChapter(chapter.getBook().getTitle(), chapter.getChapter());
 				}
 			}

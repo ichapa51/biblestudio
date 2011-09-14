@@ -196,27 +196,4 @@ public class EntityTreeModel extends DefaultStatusListener implements TreeModel 
 			fillNode(node, q.getResult());
 		}
 	}
-	
-	public static class ChapterNode extends ModelEntity {
-		Book book;
-		int chapter;
-		
-		public ChapterNode(Book book, int chapter) {
-			this.book = book;
-			this.chapter = chapter;
-		}
-		
-		public Book getBook() {
-			return book;
-		}
-		
-		public int getChapter() {
-			return chapter;
-		}
-		
-		@Override
-		public String toString() {
-			return chapter + "";
-		}
-	}
 }

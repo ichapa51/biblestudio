@@ -18,7 +18,11 @@ public interface Command<E extends Tag> {
 	
 	void executeAsync();
 	
-	public void setAsyncPriority(int priority);
+	void setAsyncPriority(int priority);
 
-	public int getAsyncPriority();
+	int getAsyncPriority();
+	
+	Exception getLastError();
+	
+	void clearLastError();
 }
